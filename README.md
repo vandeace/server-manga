@@ -37,6 +37,12 @@ after that run
 npx sequelize-cli db:migrate
 ```
 
+add .env file and add this 
+```
+JWT_SECRET=my-app-private-key-10256
+PORT=5000
+```
+
 and then run on your local by commmand 
 
 ```
