@@ -24,7 +24,7 @@ exports.protected = async (req, res, next) => {
         res.status(400).send({ message: "Invalid access token" });
       } else {
         //if user available send user id and token
-        req.user = user;
+        req.user = findUser;
         req.token = token;
         //then user next function to continue the request route
         next();
