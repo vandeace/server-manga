@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { User } = require("../models");
+const { user } = require("../models");
 
 //make authentication
 exports.protected = async (req, res, next) => {
@@ -18,8 +18,8 @@ exports.protected = async (req, res, next) => {
       const data = jwt.verify(token, process.env.JWT_SECRET);
       //verify token with secret key string
       //first search user is there user with id parameter
-      const user = await User.findOne({ where: { id: data.id } });
-      if (!user) {
+      const findUser = await user.findOne({ where: { id: data.id } });
+      if (!findUser) {
         //if user not found send error message
         res.status(400).send({ message: "Invalid access token" });
       } else {

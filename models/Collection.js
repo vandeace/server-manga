@@ -1,7 +1,7 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const Collection = sequelize.define(
-    "Collection",
+  const collection = sequelize.define(
+    "collection",
     {
       idKitsu: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
@@ -12,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  Collection.associate = function (models) {
+  collection.associate = function (models) {
     // associations can be defined here
-    Collection.belongsTo(models.User);
+    collection.belongsTo(models.user);
   };
-  return Collection;
+  return collection;
 };

@@ -1,12 +1,12 @@
-const { Collection, User } = require("../models");
+const { collection, user } = require("../models");
 const { Op } = require("sequelize");
 
 exports.index = async (req, res) => {
   try {
-    const user = req.user.id;
+    const userId = req.user.id;
     console.log(user, "user");
-    const data = await Collection.findAll({
-      where: { userId: user },
+    const data = await collection.findAll({
+      where: { userId: userId },
       attributes: { exclude: ["createdAt", "updatedAt"] },
     });
     if (data) {
@@ -23,8 +23,8 @@ exports.index = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     req.body.userId = req.user.id;
-    const newCollection = await Collection.create(req.body);
-    const findCollection = await Collection.findOne({
+    const newCollection = await collection.create(req.body);
+    const findCollection = await collection.findOne({
       where: { id: newCollection.id },
       attributes: { exclude: ["createdAt", "updatedAt", "UserId", "userId"] },
     });
@@ -37,22 +37,22 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const user = req.user.id;
-    const data = await Collection.findOne({
-      where: { [Op.and]: [{ id: req.params.id }, { userId: user }] },
+    const userId = req.user.id;
+    const data = await collection.findOne({
+      where: { [Op.and]: [{ id: req.params.id }, { userId: userId }] },
       attributes: {
         exclude: ["createdAt", "updatedAt", "userId", "UserId"],
       },
     });
     if (data) {
-      await Collection.update(req.body, {
-        where: { [Op.and]: [{ id: req.params.id }, { userId: user }] },
+      await collection.update(req.body, {
+        where: { [Op.and]: [{ id: req.params.id }, { userId: userId }] },
       });
     } else {
       res.status(404).send({ message: "Data Not Found" });
     }
-    const update = await Collection.findOne({
-      where: { [Op.and]: [{ id: req.params.id }, { userId: user }] },
+    const update = await collection.findOne({
+      where: { [Op.and]: [{ id: req.params.id }, { userId: userId }] },
       attributes: {
         exclude: ["createdAt", "updatedAt", "userId", "UserId"],
       },
@@ -66,13 +66,13 @@ exports.update = async (req, res) => {
 
 exports.destroy = async (req, res) => {
   try {
-    const user = req.user.id;
-    const order = await Collection.findOne({
-      where: { [Op.and]: [{ id: req.params.id }, { userId: user }] },
+    const userId = req.user.id;
+    const findData = await collection.findOne({
+      where: { [Op.and]: [{ id: req.params.id }, { userId: userId }] },
     });
-    if (order) {
-      await Collection.destroy({
-        where: { [Op.and]: [{ id: req.params.id }, { userId: user }] },
+    if (findData) {
+      await collection.destroy({
+        where: { [Op.and]: [{ id: req.params.id }, { userId: userId }] },
       });
       res.status(200).send({ message: "success delete data" });
     } else {
@@ -86,7 +86,7 @@ exports.destroy = async (req, res) => {
 
 exports.show = async (req, res) => {
   try {
-    const data = await Collection.findOne({
+    const data = await collection.findOne({
       where: { id: req.params.id },
       attributes: { exclude: ["createdAt", "updatedAt", "UserId", "userId"] },
     });
